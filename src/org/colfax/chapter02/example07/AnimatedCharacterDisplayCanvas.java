@@ -1,4 +1,4 @@
-package org.colfax.example03;
+package org.colfax.chapter02.example07;
 
 import java.awt.*;
 import javax.swing.*;

@@ -1,4 +1,4 @@
-package org.colfax.example04;
+package org.colfax.chapter02.example04;
 
 import java.util.*;
 import org.colfax.*;

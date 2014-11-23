@@ -1,4 +1,4 @@
-package org.colfax.example04;
+package org.colfax.chapter02.example02;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -12,28 +12,24 @@ public class SwingTypeTester extends JFrame implements CharacterSource {
     private CharacterDisplayCanvas feedbackCanvas;
     private JButton quitButton;
     private JButton startButton;
-    private JButton stopButton;
     private CharacterEventHandler handler;
-    
+
     public SwingTypeTester() {
         initComponents();
     }
-    
+
     private void initComponents() {
-	handler = new CharacterEventHandler();
+        handler = new CharacterEventHandler();
         displayCanvas = new CharacterDisplayCanvas();
         feedbackCanvas = new CharacterDisplayCanvas(this);
         quitButton = new JButton();
         startButton = new JButton();
-	stopButton = new JButton();
         add(displayCanvas, BorderLayout.NORTH);
         add(feedbackCanvas, BorderLayout.CENTER);
         JPanel p = new JPanel();
         startButton.setLabel("Start");
-	stopButton.setLabel("Stop");
         quitButton.setLabel("Quit");
         p.add(startButton);
-	p.add(stopButton);
         p.add(quitButton);
         add(p, BorderLayout.SOUTH);
 
@@ -52,30 +48,19 @@ public class SwingTypeTester extends JFrame implements CharacterSource {
         });
         startButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                producer = new RandomCharacterGenerator();
-		displayCanvas.setCharacterSource(producer);
-                producer.start();
+                producer = new RandomCharacterGenerator(); // A thread object.
+                displayCanvas.setCharacterSource(producer);
+                producer.start(); // Start the thread.
                 startButton.setEnabled(false);
-		stopButton.setEnabled(true);
-		feedbackCanvas.setEnabled(true);
+                feedbackCanvas.setEnabled(true);
                 feedbackCanvas.requestFocus();
             }
         });
-	stopButton.addActionListener(new ActionListener() {
-	    public void actionPerformed(ActionEvent evt) {
-                startButton.setEnabled(true);
-		stopButton.setEnabled(false);
-		producer.interrupt();
-		feedbackCanvas.setEnabled(false);
-	    }
-	});
         quitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 quit();
             }
         });
-            
-
         pack();
     }
 
@@ -98,8 +83,9 @@ public class SwingTypeTester extends JFrame implements CharacterSource {
     public void nextCharacter() {
         throw new IllegalStateException("We don't produce on demand");
     }
-    
+
     public static void main(String args[]) {
         new SwingTypeTester().show();
     }
 }
+

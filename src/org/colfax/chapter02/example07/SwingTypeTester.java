@@ -1,35 +1,41 @@
-package org.colfax.example02;
+package org.colfax.chapter02.example07;
 
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
 import org.colfax.*;
+
+import javax.swing.*;
 
 public class SwingTypeTester extends JFrame implements CharacterSource {
 
     protected RandomCharacterGenerator producer;
-    private CharacterDisplayCanvas displayCanvas;
+    private AnimatedCharacterDisplayCanvas displayCanvas;
     private CharacterDisplayCanvas feedbackCanvas;
     private JButton quitButton;
     private JButton startButton;
+    private JButton stopButton;
     private CharacterEventHandler handler;
-
+    
     public SwingTypeTester() {
         initComponents();
     }
-
+    
     private void initComponents() {
         handler = new CharacterEventHandler();
-        displayCanvas = new CharacterDisplayCanvas();
+        displayCanvas = new AnimatedCharacterDisplayCanvas();
         feedbackCanvas = new CharacterDisplayCanvas(this);
         quitButton = new JButton();
         startButton = new JButton();
+        stopButton = new JButton();
         add(displayCanvas, BorderLayout.NORTH);
         add(feedbackCanvas, BorderLayout.CENTER);
         JPanel p = new JPanel();
         startButton.setLabel("Start");
+        stopButton.setLabel("Stop");
+        stopButton.setEnabled(false);
         quitButton.setLabel("Quit");
         p.add(startButton);
+        p.add(stopButton);
         p.add(quitButton);
         add(p, BorderLayout.SOUTH);
 
@@ -48,12 +54,25 @@ public class SwingTypeTester extends JFrame implements CharacterSource {
         });
         startButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                producer = new RandomCharacterGenerator(); // A thread object.
+                producer = new RandomCharacterGenerator();
                 displayCanvas.setCharacterSource(producer);
-                producer.start(); // Start the thread.
+                producer.start();
+                displayCanvas.setDone(false);
+                Thread t = new Thread(displayCanvas);
+                t.start();
                 startButton.setEnabled(false);
+                stopButton.setEnabled(true);
                 feedbackCanvas.setEnabled(true);
                 feedbackCanvas.requestFocus();
+            }
+        });
+        stopButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                startButton.setEnabled(true);
+                stopButton.setEnabled(false);
+                producer.setDone();
+                displayCanvas.setDone(true);
+                feedbackCanvas.setEnabled(false);
             }
         });
         quitButton.addActionListener(new ActionListener() {
@@ -61,6 +80,8 @@ public class SwingTypeTester extends JFrame implements CharacterSource {
                 quit();
             }
         });
+            
+
         pack();
     }
 
@@ -83,9 +104,8 @@ public class SwingTypeTester extends JFrame implements CharacterSource {
     public void nextCharacter() {
         throw new IllegalStateException("We don't produce on demand");
     }
-
+    
     public static void main(String args[]) {
         new SwingTypeTester().show();
     }
 }
-

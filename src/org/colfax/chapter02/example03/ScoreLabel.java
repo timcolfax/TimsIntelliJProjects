@@ -1,9 +1,7 @@
 
-package org.colfax.example03;
+package org.colfax.chapter02.example03;
 
 import javax.swing.*;
-import java.awt.event.*;
-import java.util.concurrent.*;
 import java.util.concurrent.locks.*;
 import org.colfax.*;
 
