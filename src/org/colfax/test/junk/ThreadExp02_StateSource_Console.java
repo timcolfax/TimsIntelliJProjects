@@ -35,7 +35,6 @@ public class ThreadExp02_StateSource_Console extends ThreadExp02_StateSource{
                 if(flag.equals(ThreadExp02_AdminFlags.MODE_X))
                     break;
             } catch (IOException e) {
-                e.printStackTrace();
                 break;
             }
         }
