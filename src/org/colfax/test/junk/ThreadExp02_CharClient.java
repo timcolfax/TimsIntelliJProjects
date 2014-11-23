@@ -7,10 +7,10 @@ import java.util.Random;
  */
 public class ThreadExp02_CharClient extends Thread{
 
-    ThreadExp02_CharacterPool.CharServer server;
+    ThreadExp02_CharServer server;
     Random random = new Random();
 
-    public ThreadExp02_CharClient(ThreadExp02_CharacterPool.CharServer server){
+    public ThreadExp02_CharClient(ThreadExp02_CharServer server){
         this.server = server;
     }
 
