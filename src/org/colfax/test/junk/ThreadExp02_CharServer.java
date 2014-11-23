@@ -1,5 +1,7 @@
 package org.colfax.test.junk;
 
+import java.util.ArrayList;
+
 /**
  * The CharServer serves characters to clients who call getChar().
  * It possesses its OWN thread which reads configuration information
@@ -7,26 +9,29 @@ package org.colfax.test.junk;
  */
 public class ThreadExp02_CharServer extends Thread implements ThreadExp02_StateChangeListener{
 
-    private ThreadExp02_AdminFlags  flag              = ThreadExp02_AdminFlags.MODE_A;
-    //private ThreadExp02_AdminPoller adminPollThread   = new ThreadExp02_AdminPoller(this);
-    private ThreadExp02_StateSource stateSource;
+    private ThreadExp02_AdminFlags             flag         = ThreadExp02_AdminFlags.MODE_A;
+    private ArrayList<ThreadExp02_StateSource> stateSources = new ArrayList<ThreadExp02_StateSource>();
 
-    public ThreadExp02_CharServer(ThreadExp02_StateSource source){
-        stateSource = source;
-        stateSource.addListener(this);
+    public void addStateSource(ThreadExp02_StateSource source){
+        source.addListener(this);
+        stateSources.add(source);
+    }
+
+    public void removeStateSource(ThreadExp02_StateSource source){
+        stateSources.remove(source);
     }
 
     @Override
     public void run(){
 
-        //adminPollThread.start();
-        stateSource.start();
+        for(ThreadExp02_StateSource s : stateSources)
+            s.start();
 
         while(!isInterrupted()) {
             if(flag.equals(ThreadExp02_AdminFlags.MODE_X)) {
                 System.out.println("Received STOP command. Joining adminPollThread...");
-//                adminPollThread.interrupt();
-                stateSource.interrupt();
+                for(ThreadExp02_StateSource s : stateSources)
+                    s.interrupt();
                 break;
             }
         }
