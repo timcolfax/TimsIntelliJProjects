@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /**
  * Created by colfax on 11/21/2014.
  */
-public class ThreadExp02_AdminPoller extends ThreadExp02_StateSource{
+public class ThreadExp02_StateSource_Console extends ThreadExp02_StateSource{
     private BufferedInputStream                         bis         = new BufferedInputStream(System.in);
     private ArrayList<ThreadExp02_StateChangeListener>  listeners   = new ArrayList<ThreadExp02_StateChangeListener>();
     private ThreadExp02_AdminFlags                      flag        = null;

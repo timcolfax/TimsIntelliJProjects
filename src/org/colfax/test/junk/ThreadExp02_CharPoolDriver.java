@@ -14,7 +14,8 @@ public class ThreadExp02_CharPoolDriver {
 
     private void go() throws InterruptedException {
         ThreadExp02_CharServer w1 = new ThreadExp02_CharServer();
-        w1.addStateSource(new ThreadExp02_AdminPoller());
+        w1.addStateSource(new ThreadExp02_StateSource_Console());
+        w1.addStateSource(new ThreadExp02_StateSource_Auto());
         w1.start();
 
         ArrayList<ThreadExp02_CharClient> clients = new ArrayList<ThreadExp02_CharClient>();
